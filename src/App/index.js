@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Container } from './styles';
+import { Container, DataContainer } from './styles';
 import GlobalStyle from '../styles/GlobalStyle';
 import Title from '../components/Title';
 import Info from '../components/Info';
@@ -16,8 +16,10 @@ export default function App() {
       <Container>
         <Info />
 
-        <ClientData />
-        <PaymentData />
+        <DataContainer>
+          <ClientData />
+          <PaymentData />
+        </DataContainer>
         <OrderData />
       </Container>
     </>
