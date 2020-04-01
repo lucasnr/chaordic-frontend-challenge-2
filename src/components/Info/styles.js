@@ -1,10 +1,9 @@
 import styled from 'styled-components';
 
-import { colorPrimary, colorSuccess, colorWarning } from '../colors';
+import { colorPrimary, colorSuccess, colorWarning } from '../../colors';
 
 export const Container = styled.section`
   display: flex;
-  margin-top: 1rem;
 `;
 
 export const Group = styled.div`
@@ -20,15 +19,13 @@ export const Label = styled.h2`
 const Value = styled.h3`
   font-size: 0.9375rem;
   margin: 0px;
+  margin-top: 0.5rem;
 `;
 
-export const Order = styled(Value)`
-  margin-top: 1rem;
-`;
+export const Order = styled(Value)``;
 
 export const Status = styled(Value)`
   font-weight: normal;
-  margin-top: 1rem;
 
   &::before {
     background-color: ${colorWarning};
@@ -48,7 +45,6 @@ export const Related = styled(Value)`
   border-radius: 3px;
   color: ${colorSuccess};
   display: inline-block;
-  margin-top: 0.5rem;
   margin-right: 0.75rem;
-  padding: 0.25rem 0.375rem;
+  padding: 0.125rem 0.375rem;
 `;
