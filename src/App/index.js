@@ -7,6 +7,7 @@ import Info from '../components/Info';
 import ClientData from '../components/ClientData';
 import PaymentData from '../components/PaymentData';
 import OrderData from '../components/OrderData';
+import Delivery from '../components/Delivery';
 
 export default function App() {
   return (
@@ -20,7 +21,10 @@ export default function App() {
           <ClientData />
           <PaymentData />
         </DataContainer>
+
         <OrderData />
+
+        <Delivery />
       </Container>
     </>
   );
