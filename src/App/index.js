@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { Container, DataContainer } from './styles';
 import GlobalStyle from '../styles/GlobalStyle';
@@ -9,22 +9,51 @@ import PaymentData from '../components/PaymentData';
 import OrderData from '../components/OrderData';
 import Delivery from '../components/Delivery';
 
+import { getOrder } from '../services/api';
+
 export default function App() {
+  const [order, setOrder] = useState(null);
+  useEffect(() => {
+    getOrder().then(({ data }) => {
+      setOrder(data);
+    });
+  }, []);
+
+  if (!order) return null;
+
+  const {
+    id,
+    status,
+    fulfillments,
+    customer,
+    billingAddress,
+    payments,
+    totals,
+    createdAt,
+    pointOfSale
+  } = order;
+
   return (
     <>
       <GlobalStyle />
       <Title text="Tratamento de entregas" />
       <Container>
-        <Info />
+        <Info id={id} status={status} fulfillments={fulfillments} />
 
         <DataContainer>
-          <ClientData />
-          <PaymentData />
+          <ClientData {...{ ...customer, ...billingAddress }} />
+          <PaymentData {...{ ...payments[0], ...totals }} />
         </DataContainer>
 
-        <OrderData />
+        <OrderData
+          createdAt={createdAt}
+          pointOfSale={pointOfSale}
+          fulfillments={fulfillments}
+        />
 
-        <Delivery />
+        {Object.entries(fulfillments).map(item => (
+          <Delivery key={item[0]} {...item[1]} orderId={id} />
+        ))}
       </Container>
     </>
   );

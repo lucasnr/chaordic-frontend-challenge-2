@@ -1,6 +1,11 @@
 import styled from 'styled-components';
 
-import { colorPrimary, colorSuccess, colorWarning } from '../../colors';
+import {
+  colorPrimary,
+  colorSuccess,
+  colorWarning,
+  colorInfo
+} from '../../colors';
 
 export const Container = styled.section`
   display: flex;
@@ -28,7 +33,12 @@ export const Status = styled(Value)`
   font-weight: normal;
 
   &::before {
-    background-color: ${colorWarning};
+    background-color: ${props =>
+      props.status === 'DELIVERED'
+        ? colorSuccess
+        : props.status === 'PENDING'
+        ? colorWarning
+        : colorInfo};
     border: 2px solid rgba(0, 0, 0, 0.15);
     border-radius: 50%;
     content: ' ';

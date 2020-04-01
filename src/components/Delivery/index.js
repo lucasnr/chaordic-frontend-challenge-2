@@ -1,4 +1,5 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
+import { format, parseISO } from 'date-fns';
 
 import { Title } from '../Section';
 import {
@@ -15,14 +16,52 @@ import {
   Price
 } from './styles';
 
-import product from '../../assets/product.png';
+import parseMoney from '../../utils/parseMoney';
 
-export default function Deliver() {
+export default function Deliver({
+  orderId,
+  id,
+  type,
+  freightCosts,
+  shipment,
+  items,
+  status
+}) {
   const [display, setDisplay] = useState(true);
 
   const handleClick = useCallback(() => {
     setDisplay(!display);
   }, [display]);
+
+  const formatted = useMemo(() => {
+    const newItems = Object.entries(items).map(item => ({
+      ...item[1],
+      priceFormatted: parseMoney(item[1].price),
+      subtotal: parseMoney(item[1].price * item[1].quantity),
+      total: parseMoney(
+        item[1].price * item[1].quantity + freightCosts.totalPrice
+      )
+    }));
+
+    const reducer = (accumulator, current) => accumulator + current;
+    return {
+      deliveryEstimatedDate: format(
+        parseISO(freightCosts.deliveryEstimatedDate),
+        'dd/MM/yyyy'
+      ),
+      freightCost: parseMoney(freightCosts.totalPrice),
+      items: newItems,
+      subtotal: parseMoney(
+        newItems.map(item => item.quantity * item.price).reduce(reducer)
+      ),
+      totalFreightCosts: parseMoney(newItems.length * freightCosts.totalPrice),
+      total: parseMoney(
+        newItems.map(item => item.quantity * item.price).reduce(reducer) +
+          newItems.length * freightCosts.totalPrice
+      ),
+      quantity: newItems.map(item => item.quantity).reduce(reducer)
+    };
+  }, [freightCosts, items]);
 
   return (
     <Container>
@@ -37,13 +76,21 @@ export default function Deliver() {
         </button>
 
         <Identifier>
-          <Text>Entrega F1</Text>
-          <Text>22071559-F1</Text>
+          <Text>Entrega {id}</Text>
+          <Text>
+            {orderId}-{id}
+          </Text>
         </Identifier>
 
-        <Status>
+        <Status status={status}>
           <Subtitle>Status da entrega</Subtitle>
-          <Text>Entregue</Text>
+          <Text>
+            {status === 'DELIVERED'
+              ? 'Entregue'
+              : status === 'PENDING'
+              ? 'Pendente'
+              : 'Separação'}
+          </Text>
         </Status>
       </Header>
 
@@ -59,16 +106,19 @@ export default function Deliver() {
             </div>
             <div>
               <Subtitle>Modalidade</Subtitle>
-              <Text>Envio pela loja</Text>
+              <Text>{type === 'SHIPMENT' ? 'Envio pela loja' : type}</Text>
             </div>
             <div>
               <Subtitle>Data Previsão Cliente</Subtitle>
-              <Text>00/00/0000</Text>
+              <Text>{formatted.deliveryEstimatedDate}</Text>
             </div>
             <div>
               <Subtitle>Endereço de entrega</Subtitle>
-              <Text>Rua Oscar Freire, 333 São Paulo - SP</Text>
-              <Text>03745-001</Text>
+              <Text>
+                {shipment.address1}, {shipment.number} {shipment.city} -{' '}
+                {shipment.state}
+              </Text>
+              <Text>{shipment.zip}</Text>
             </div>
             <div>
               <Subtitle>Transportadora</Subtitle>
@@ -76,11 +126,11 @@ export default function Deliver() {
             </div>
             <div>
               <Subtitle>Tipo</Subtitle>
-              <Text>Expressa</Text>
+              <Text>{type}</Text>
             </div>
             <div>
               <Subtitle>Preço do Frete</Subtitle>
-              <Text>R$00,00</Text>
+              <Text>{formatted.freightCost}</Text>
             </div>
             <div>
               <Subtitle>Data Previsão Transportadora</Subtitle>
@@ -101,30 +151,60 @@ export default function Deliver() {
               </tr>
             </thead>
             <tbody>
+              {formatted.items.map(item => (
+                <tr key={item.sku}>
+                  <td>
+                    <Figure>
+                      <img src={item.image} alt={item.name} />
+                      <figcaption>
+                        {item.name} <br />
+                        {item.color}, {item.size}
+                      </figcaption>
+                    </Figure>
+                  </td>
+                  <td>{item.sku}</td>
+                  <td>{item.quantity}</td>
+                  <td>
+                    <Price>
+                      <span>Subtotal</span>
+                      <span>{item.subtotal}</span>
+                    </Price>
+                    <Price>
+                      <span>Frete</span>
+                      <span>{formatted.freightCost}</span>
+                    </Price>
+                    <Price>
+                      <span>Valor total</span>
+                      <span>{item.total}</span>
+                    </Price>
+                  </td>
+                </tr>
+              ))}
               <tr>
+                <td></td>
+                <td></td>
+                <td></td>
                 <td>
-                  <Figure>
-                    <img src={product} alt="product" />
-                    <figcaption>
-                      Tenis Coca Coca Loretto - Feminino <br />
-                      Branco, Cinza, 39
-                    </figcaption>
-                  </Figure>
-                </td>
-                <td>AR384675</td>
-                <td>2</td>
-                <td>
+                  <Price>
+                    <span>
+                      {formatted.quantity} unidades de {formatted.items.length}{' '}
+                      itens
+                    </span>
+                  </Price>
+
                   <Price>
                     <span>Subtotal</span>
-                    <span>R$100,00</span>
+                    <span>{formatted.subtotal}</span>
                   </Price>
+
                   <Price>
-                    <span>Frete</span>
-                    <span>R$5,00</span>
+                    <span>Frete total</span>
+                    <span>{formatted.totalFreightCosts}</span>
                   </Price>
+
                   <Price>
                     <span>Valor total</span>
-                    <span>R$205,00</span>
+                    <span>{formatted.total}</span>
                   </Price>
                 </td>
               </tr>

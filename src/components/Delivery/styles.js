@@ -1,7 +1,12 @@
 import styled from 'styled-components';
 
 import { Section, Subtitle as SectionSubtitle } from '../Section';
-import { colorSecondary, colorSuccess } from '../../colors';
+import {
+  colorSecondary,
+  colorSuccess,
+  colorWarning,
+  colorInfo
+} from '../../colors';
 
 export const Container = styled(Section)`
   padding: 0px;
@@ -55,7 +60,12 @@ export const Status = styled.div`
     font-weight: normal;
 
     &::before {
-      background-color: ${colorSuccess};
+      background-color: ${props =>
+        props.status === 'DELIVERED'
+          ? colorSuccess
+          : props.status === 'PENDING'
+          ? colorWarning
+          : colorInfo};
       border: 2px solid rgba(0, 0, 0, 0.25);
       border-radius: 50%;
       content: ' ';
