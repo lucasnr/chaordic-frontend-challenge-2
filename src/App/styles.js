@@ -6,8 +6,14 @@ export const Container = styled.main`
   padding: 1rem;
 `;
 
-export const DataContainer = styled.main`
+export const DataContainer = styled.div`
   display: grid;
   grid-gap: 1rem;
-  grid-template-columns: 1.5fr 1fr;
+
+  @media (min-width: 768px) {
+    grid-template-columns: 1.25fr 1fr;
+  }
+  @media (min-width: 992px) {
+    grid-template-columns: 1.5fr 1fr;
+  }
 `;

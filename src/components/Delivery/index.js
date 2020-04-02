@@ -141,74 +141,76 @@ export default function Deliver({
           <hr />
 
           <Title>Detalhes da Entrega</Title>
-          <Table cellspacing="0" cellpadding="0">
-            <thead>
-              <tr>
-                <th>Produto</th>
-                <th>Sku</th>
-                <th>Qtd.</th>
-                <th>Preço</th>
-              </tr>
-            </thead>
-            <tbody>
-              {formatted.items.map(item => (
-                <tr key={item.sku}>
+          <Table>
+            <table cellspacing="0" cellpadding="0">
+              <thead>
+                <tr>
+                  <th>Produto</th>
+                  <th>Sku</th>
+                  <th>Qtd.</th>
+                  <th>Preço</th>
+                </tr>
+              </thead>
+              <tbody>
+                {formatted.items.map(item => (
+                  <tr key={item.sku}>
+                    <td>
+                      <Figure>
+                        <img src={item.image} alt={item.name} />
+                        <figcaption>
+                          {item.name} <br />
+                          {item.color}, {item.size}
+                        </figcaption>
+                      </Figure>
+                    </td>
+                    <td>{item.sku}</td>
+                    <td>{item.quantity}</td>
+                    <td>
+                      <Price>
+                        <span>Subtotal</span>
+                        <span>{item.subtotal}</span>
+                      </Price>
+                      <Price>
+                        <span>Frete</span>
+                        <span>{formatted.freightCost}</span>
+                      </Price>
+                      <Price>
+                        <span>Valor total</span>
+                        <span>{item.total}</span>
+                      </Price>
+                    </td>
+                  </tr>
+                ))}
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
                   <td>
-                    <Figure>
-                      <img src={item.image} alt={item.name} />
-                      <figcaption>
-                        {item.name} <br />
-                        {item.color}, {item.size}
-                      </figcaption>
-                    </Figure>
-                  </td>
-                  <td>{item.sku}</td>
-                  <td>{item.quantity}</td>
-                  <td>
+                    <Price>
+                      <span>
+                        {formatted.quantity} unidades de{' '}
+                        {formatted.items.length} itens
+                      </span>
+                    </Price>
+
                     <Price>
                       <span>Subtotal</span>
-                      <span>{item.subtotal}</span>
+                      <span>{formatted.subtotal}</span>
                     </Price>
+
                     <Price>
-                      <span>Frete</span>
-                      <span>{formatted.freightCost}</span>
+                      <span>Frete total</span>
+                      <span>{formatted.totalFreightCosts}</span>
                     </Price>
+
                     <Price>
                       <span>Valor total</span>
-                      <span>{item.total}</span>
+                      <span>{formatted.total}</span>
                     </Price>
                   </td>
                 </tr>
-              ))}
-              <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>
-                  <Price>
-                    <span>
-                      {formatted.quantity} unidades de {formatted.items.length}{' '}
-                      itens
-                    </span>
-                  </Price>
-
-                  <Price>
-                    <span>Subtotal</span>
-                    <span>{formatted.subtotal}</span>
-                  </Price>
-
-                  <Price>
-                    <span>Frete total</span>
-                    <span>{formatted.totalFreightCosts}</span>
-                  </Price>
-
-                  <Price>
-                    <span>Valor total</span>
-                    <span>{formatted.total}</span>
-                  </Price>
-                </td>
-              </tr>
-            </tbody>
+              </tbody>
+            </table>
           </Table>
         </Details>
       )}

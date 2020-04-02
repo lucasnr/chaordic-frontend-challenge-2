@@ -8,7 +8,12 @@ import {
 } from '../../colors';
 
 export const Container = styled.section`
-  display: flex;
+  display: grid;
+  grid-gap: 1rem;
+
+  @media (min-width: 576px) {
+    display: flex;
+  }
 `;
 
 export const Group = styled.div`

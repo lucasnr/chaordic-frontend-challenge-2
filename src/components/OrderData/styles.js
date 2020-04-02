@@ -4,10 +4,21 @@ import { Title as SectionTitle } from '../Section';
 
 export const Container = styled.div`
   display: flex;
+  flex-direction: column;
+
+  @media (min-width: 576px) {
+    flex-direction: row;
+  }
 `;
 
 export const Group = styled.div`
-  margin-right: 5rem;
+  @media (min-width: 576px) {
+    margin-right: 2rem;
+  }
+
+  @media (min-width: 768px) {
+    margin-right: 5rem;
+  }
 `;
 
 export const Title = styled(SectionTitle)`

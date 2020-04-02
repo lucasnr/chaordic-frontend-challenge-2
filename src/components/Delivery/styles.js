@@ -44,7 +44,11 @@ export const Header = styled.header`
 `;
 
 export const Identifier = styled.div`
-  margin: 0px 2rem;
+  margin-left: 1rem;
+
+  @media (min-width: 576px) {
+    margin-left: 2rem;
+  }
 
   ${Text}:first-child {
     color: ${colorSuccess};
@@ -53,7 +57,11 @@ export const Identifier = styled.div`
 `;
 
 export const Status = styled.div`
-  margin: 0px 2rem;
+  margin-left: 1rem;
+
+  @media (min-width: 576px) {
+    margin-left: 2rem;
+  }
 
   ${Text} {
     font-size: 0.875rem;
@@ -80,6 +88,7 @@ export const Status = styled.div`
 
 export const Details = styled.div`
   padding: 1rem;
+  display: grid;
 
   hr {
     margin: 2.5rem 0px;
@@ -88,40 +97,51 @@ export const Details = styled.div`
 
 export const DetailsGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
   grid-column-gap: 1rem;
   grid-row-gap: 2rem;
+
+  @media (min-width: 576px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
 `;
 
-export const Table = styled.table`
-  border-top-left-radius: 1rem;
-  border-top-right-radius: 1rem;
-  border-spacing: 0px;
-  font-size: 0.75rem;
-  font-weight: bold;
-  overflow: hidden;
+export const Table = styled.div`
+  overflow-x: scroll;
   width: 100%;
 
-  thead tr {
-    background-color: ${colorSecondary};
-    color: rgba(0, 0, 0, 0.5);
-    text-align: left;
-    text-transform: uppercase;
-  }
+  table {
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+    border-spacing: 0px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    overflow: hidden;
+    width: 100%;
 
-  th,
-  td {
-    padding: 0.75rem 1rem;
-  }
-
-  tbody tr {
-    &:nth-child(even) {
+    thead tr {
       background-color: ${colorSecondary};
+      color: rgba(0, 0, 0, 0.5);
+      text-align: left;
+      text-transform: uppercase;
     }
 
-    td:last-child {
-      background-color: #fffff8;
-      border-bottom: 1px solid #eee;
+    th,
+    td {
+      padding: 0.75rem 1rem;
+    }
+
+    tbody tr {
+      &:nth-child(even) {
+        background-color: ${colorSecondary};
+      }
+
+      td:last-child {
+        background-color: #fffff8;
+        border-bottom: 1px solid #eee;
+      }
     }
   }
 `;
@@ -129,6 +149,7 @@ export const Table = styled.table`
 export const Figure = styled.figure`
   align-items: center;
   display: flex;
+  flex-direction: column;
   margin: 0px;
 
   img {
@@ -140,6 +161,15 @@ export const Figure = styled.figure`
 
   figcaption {
     line-height: 1.5;
+    margin-top: 1rem;
+  }
+
+  @media (min-width: 576px) {
+    flex-direction: row;
+
+    figcaption {
+      margin-top: 0px;
+    }
   }
 `;
 
@@ -147,6 +177,10 @@ export const Price = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 1rem;
+
+  span:first-child {
+    margin-right: 0.5rem;
+  }
 
   &:nth-child(2) {
     margin-top: 2rem;
